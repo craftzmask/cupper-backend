@@ -12,3 +12,8 @@ Start the server:
 ```
 npm start
 ```
+
+Start the server as development mode:
+```
+npm run dev
+```
