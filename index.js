@@ -1,10 +1,11 @@
-const http = require('http')
+const express = require('express')
+const app = express()
 
-const app = http.createServer((request, response) => {
-  response.writeHead(200, { 'Content-Type': 'text/plain' })
-  response.end('Hello World')
+app.get('/', (request, response) => {
+  response.send('<h1>Hello World!</h1>')
 })
 
 const PORT = 3001
-app.listen(PORT)
-console.log(`Server running on port ${PORT}`)
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`)
+})
