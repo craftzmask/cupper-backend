@@ -5,10 +5,12 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const mongoose = require('mongoose')
 const User  = require('./userSchema')
+const Location = require('./locationSchema')
 
 const app = express()
 
 app.use(cors())
+app.use(express.static('build'))
 app.use(express.json())
 
 mongoose
@@ -16,12 +18,46 @@ mongoose
   .then(result => console.log('connected to MongoDB'))
   .catch((error) => console.log('error connecting to MongoDB:', error.message))
 
-app.get('/', (request, response) => {
+app.get('/api', (request, response) => {
   response.send(`
     <h1>Welcome to Cupper Backend</h1>
     <p><b>Login via:</b>   <i>http://localhost:3001/api/login</i></p>
     <p><b>Sign Up via:</b> <i>http://localhost:3001/api/users</i></p>
   `)
+})
+
+// route check in
+// send data: { address of restaurant, number of people }
+// use number of people to add to the current people at the restaurant
+
+// use address to get data object
+// add number of people to the object
+// save the object to database
+
+
+// remove peple after 1 hour
+// Schedule library?????
+// Update database everyone hour
+// 3:00pm 5 people -> 4:00pm subtract 5 people from a location
+// subtract all people from all locations on the database ==>>>>> could be slow
+
+
+// route check out
+
+
+app.post('/api/locations', async (request, response) => {
+  const { place_id } = request.body
+  const location = await Location.findOne({ place_id })
+
+  if (!location) {
+    const locationObject = new Location({
+      place_id,
+      numberOfPeople: 0
+    })
+
+    const savedLocation = await locationObject.save()
+    response.status(201).json(savedLocation)
+  }
 })
 
 // Login
