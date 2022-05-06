@@ -1,8 +1,10 @@
 const express = require('express')
+require('express-async-errors')
 const app = express()
 const cors = require('cors')
 const mongoose = require('mongoose')
 const config = require('./utils/config')
+const middleware = require('./utils/middleware')
 
 const usersRouter = require('./controllers/users')
 const loginRouter = require('./controllers/login')
@@ -19,6 +21,9 @@ app.use('/api/login', loginRouter)
 app.use('/api/locations', locationsRouter)
 app.use('/api/checkin', checkinRouter)
 app.use('/api/checkout', checkoutRouter)
+
+app.use(middleware.unknownEndpoint)
+app.use(middleware.errorHandler)
 
 mongoose
   .connect(config.MONGODB_URI)
