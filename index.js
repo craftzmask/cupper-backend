@@ -18,6 +18,14 @@ mongoose
   .then(result => console.log('connected to MongoDB'))
   .catch((error) => console.log('error connecting to MongoDB:', error.message))
 
+const getTokenFrom = request => {
+  const authorization = request.get('authorization')
+  if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
+    return authorization.substring(7)
+  }
+  return null
+}
+
 app.get('/api', (request, response) => {
   response.send(`
     <h1>Welcome to Cupper Backend</h1>
@@ -26,29 +34,10 @@ app.get('/api', (request, response) => {
   `)
 })
 
-// route check in
-// send data: { address of restaurant, number of people }
-// use number of people to add to the current people at the restaurant
-
-// use address to get data object
-// add number of people to the object
-// save the object to database
-
-
-// remove peple after 1 hour
-// Schedule library?????
-// Update database everyone hour
-// 3:00pm 5 people -> 4:00pm subtract 5 people from a location
-// subtract all people from all locations on the database ==>>>>> could be slow
-
-
-// route check out
-
-
 app.post('/api/locations', async (request, response) => {
   const { place_id } = request.body
-  const location = await Location.findOne({ place_id })
 
+  const location = await Location.findOne({ place_id })
   if (!location) {
     const locationObject = new Location({
       place_id,
@@ -110,6 +99,50 @@ app.post('/api/users', async (request, response) => {
   const savedUser = await user.save()
 
   response.status(201).json(savedUser)
+})
+
+app.post('/api/checkin', async (request, response) => {
+  const { place_id, numberOfPeople } = request.body
+
+  const token = getTokenFrom(request)
+  const decodedToken = jwt.verify(token, process.env.SECRET)
+  if (!decodedToken.id) {
+    return response.status(401).json({ error: 'token missing or invalid' })
+  }
+
+  const location = await Location.findOne({ place_id })
+  if (location === null) {
+    return response.status(404).json({
+      error: "The place doesn't exist"
+    })
+  }
+
+  location.numberOfPeople += numberOfPeople
+  const savedLocation = await location.save()
+
+  response.json(savedLocation)
+})
+
+app.post('/api/checkout', async (request, response) => {
+  const { place_id, numberOfPeople } = request.body
+
+  const token = getTokenFrom(request)
+  const decodedToken = jwt.verify(token, process.env.SECRET)
+  if (!decodedToken.id) {
+    return response.status(401).json({ error: 'token missing or invalid' })
+  }
+
+  const location = await Location.findOne({ place_id })
+  if (location === null) {
+    return response.status(404).json({
+      error: "The place doesn't exist"
+    })
+  }
+
+  location.numberOfPeople -= numberOfPeople
+  const savedLocation = await location.save()
+
+  response.json(savedLocation)
 })
 
 const PORT = process.env.PORT
