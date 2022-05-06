@@ -40,7 +40,7 @@ app.post('/api/locations', async (request, response) => {
   const location = await Location.findOne({ place_id })
   if (!location) {
     const locationObject = new Location({
-      place_id,
+      _id: place_id,
       numberOfPeople: 0
     })
 
@@ -110,7 +110,7 @@ app.post('/api/checkin', async (request, response) => {
     return response.status(401).json({ error: 'token missing or invalid' })
   }
 
-  const location = await Location.findOne({ place_id })
+  const location = await Location.findById(place_id)
   if (location === null) {
     return response.status(404).json({
       error: "The place doesn't exist"
@@ -132,7 +132,7 @@ app.post('/api/checkout', async (request, response) => {
     return response.status(401).json({ error: 'token missing or invalid' })
   }
 
-  const location = await Location.findOne({ place_id })
+  const location = await Location.findById(place_id)
   if (location === null) {
     return response.status(404).json({
       error: "The place doesn't exist"

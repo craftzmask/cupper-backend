@@ -1,8 +1,7 @@
 const mongoose = require('mongoose')
 
 const locationSchema = new mongoose.Schema({
-  id: String,
-  place_id: String,
+  _id: String,
   numberOfPeople: Number
 })
 
