@@ -12,7 +12,7 @@ const locationsRouter = require('./controllers/locations')
 const checkinRouter = require('./controllers/checkin')
 const checkoutRouter = require('./controllers/checkout')
 const restaurantsRouter = require('./controllers/restaurants')
-const topRouter = require('./controllers/topRouter')
+const topRouter = require('./controllers/top')
 
 app.use(cors())
 app.use(express.static('build'))
