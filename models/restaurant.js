@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 const restaurantSchema = new mongoose.Schema({
-  _id: String,
+  place_id: String,
   name: String,
   address_object: {
     vicinity: String,
