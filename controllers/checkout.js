@@ -2,19 +2,10 @@ const jwt = require('jsonwebtoken')
 const checkoutRouter = require('express').Router()
 const Location = require('../models/location')
 
-const getTokenFrom = request => {
-  const authorization = request.get('authorization')
-  if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
-    return authorization.substring(7)
-  }
-  return null
-}
-
 checkoutRouter.post('/', async (request, response) => {
   const { place_id, numberOfPeople } = request.body
 
-  const token = getTokenFrom(request)
-  const decodedToken = jwt.verify(token, process.env.SECRET)
+  const decodedToken = jwt.verify(request.token, process.env.SECRET)
   if (!decodedToken.id) {
     return response.status(401).json({ error: 'token missing or invalid' })
   }
