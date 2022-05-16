@@ -2,16 +2,6 @@ const jwt = require('jsonwebtoken')
 const checkinRouter = require('express').Router()
 const Location = require('../models/location')
 
-/*
-const getTokenFrom = request => {
-  const authorization = request.get('authorization')
-  if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
-    return authorization.substring(7)
-  }
-  return null
-}
-
-*/
 checkinRouter.post('/', async (request, response) => {
   const { place_id, numberOfPeople } = request.body
 
