@@ -25,4 +25,14 @@ restaurantsRouter.post('/', async (request, response) => {
   }
 })
 
+restaurantsRouter.get('/', async (request, response) => {
+  const restaurants = await Restaurant.find({})
+  response.json(restaurants)
+})
+
+restaurantsRouter.get('/:id', async (request, response) => {
+  const restaurant = await Restaurant.findById(request.params.id)
+  response.json(restaurant)
+})
+
 module.exports = restaurantsRouter

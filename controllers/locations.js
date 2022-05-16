@@ -6,11 +6,7 @@ locationsRouter.post('/', async (request, response) => {
   
   const location = await Location.findById(place_id)
   if (!location) {
-    const locationObject = new Location({
-      _id: place_id,
-      numberOfPeople: 0
-    })
-
+    const locationObject = new Location({ place_id })
     const savedLocation = await locationObject.save()
     response.status(201).json(savedLocation)
   }

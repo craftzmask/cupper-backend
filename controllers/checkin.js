@@ -26,9 +26,11 @@ checkinRouter.post('/', async (request, response) => {
     user: user._id
   })
 
-  const savedLocation = await location.save()
+  await location.save()
+  restaurant.numberOfPeople += numberOfPeople
+  const savedRestaurant = await restaurant.save()
 
-  response.json(savedLocation)
+  response.json(savedRestaurant)
 })
 
 module.exports = checkinRouter
