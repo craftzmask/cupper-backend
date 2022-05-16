@@ -1,26 +1,18 @@
-const jwt = require('jsonwebtoken')
 const checkoutRouter = require('express').Router()
 const Location = require('../models/location')
 
 checkoutRouter.post('/', async (request, response) => {
   const { place_id, numberOfPeople } = request.body
 
-  const decodedToken = jwt.verify(request.token, process.env.SECRET)
-  if (!decodedToken.id) {
-    return response.status(401).json({ error: 'token missing or invalid' })
-  }
-
-  const location = await Location.findById(place_id)
+  const location = await Location.findOne({ place_id, user: request.user.id })
   if (location === null) {
     return response.status(404).json({
-      error: "The place doesn't exist"
+      error: "The location doesn't exist"
     })
   }
-
   location.numberOfPeople -= numberOfPeople
-  const savedLocation = await location.save()
-
-  response.json(savedLocation)
+  await Location.findOneAndDelete({ user: request.user.id })
+  response.json(location)
 })
 
 module.exports = checkoutRouter

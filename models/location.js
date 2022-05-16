@@ -1,8 +1,12 @@
 const mongoose = require('mongoose')
 
 const locationSchema = new mongoose.Schema({
-  _id: String,
-  numberOfPeople: Number
+  place_id: String,
+  numberOfPeople: Number,
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  }
 })
 
 locationSchema.set('toJSON', {

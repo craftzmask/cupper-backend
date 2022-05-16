@@ -1,23 +1,31 @@
-const jwt = require('jsonwebtoken')
 const checkinRouter = require('express').Router()
 const Location = require('../models/location')
+const Restaurant = require('../models/restaurant')
 
 checkinRouter.post('/', async (request, response) => {
   const { place_id, numberOfPeople } = request.body
+  const user = request.user
 
-  const decodedToken = jwt.verify(request.token, process.env.SECRET)
-  if (!decodedToken.id) {
-    return response.status(401).json({ error: 'token missing or invalid' })
-  }
-
-  const location = await Location.findById(place_id)
-  if (location === null) {
-    return response.status(404).json({
-      error: "The place doesn't exist"
+  const users = await Location.find({ user: user.id })
+  if (users.length > 0) {
+    return response.status(403).json({
+      error: "You cannot check-in more than 1 locations. Please check-out the previous location first"
     })
   }
 
-  location.numberOfPeople += numberOfPeople
+  const restaurant = await Restaurant.findById(place_id)
+  if (restaurant === null) {
+    return response.status(404).json({
+      error: "The location doesn't exist"
+    })
+  }
+
+  const location = new Location({
+    place_id,
+    numberOfPeople,
+    user: user._id
+  })
+
   const savedLocation = await location.save()
 
   response.json(savedLocation)

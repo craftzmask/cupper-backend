@@ -19,11 +19,12 @@ app.use(express.static('build'))
 app.use(express.json())
 
 app.use(middleware.tokenExtractor)
+
 app.use('/api/users', usersRouter)
 app.use('/api/login', loginRouter)
 app.use('/api/locations', locationsRouter)
-app.use('/api/checkin', checkinRouter)
-app.use('/api/checkout', checkoutRouter)
+app.use('/api/checkin', middleware.userExtractor, checkinRouter)
+app.use('/api/checkout', middleware.userExtractor, checkoutRouter)
 app.use('/api/restaurants', restaurantsRouter)
 app.use('/api/top', topRouter)
 
