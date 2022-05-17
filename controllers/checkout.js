@@ -1,6 +1,6 @@
 const checkoutRouter = require('express').Router()
-const Location = require('../models/location')
 const Restaurant = require('../models/restaurant')
+const user = require('../models/user')
 
 checkoutRouter.post('/', async (request, response) => {
   const { place_id } = request.body
@@ -12,18 +12,20 @@ checkoutRouter.post('/', async (request, response) => {
     })
   }
 
-  const location = await Location.findOne({ place_id, user: request.user.id })
-  if (location === null) {
-    return response.status(404).json({
-      error: "The location doesn't exist"
+  if (request.user.place_id !== place_id) {
+    return response.status(400).json({
+      error: "The restaurant must be the same as checked in"
     })
   }
-  await Location.findOneAndDelete({ user: request.user.id })
   
-  const indexUser = restaurant.numberOfPeople.indexOf(user._id.toString())
+  const indexUser = restaurant.numberOfPeople.indexOf(request.user._id.toString())
   restaurant.numberOfPeople.splice(indexUser, 1)
 
   const savedRestaurant = await restaurant.save()
+  
+  request.user.place_id = ''
+  await request.user.save()
+
   response.json(savedRestaurant)
 })
 
