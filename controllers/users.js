@@ -3,7 +3,7 @@ const usersRouter = require('express').Router()
 const User = require('../models/user')
 
 usersRouter.post('/', async (request, response) => {
-  const { email, name, password } = request.body
+  const { email, password } = request.body
 
   const existingUser = await User.findOne({ email })
   if (existingUser) {
@@ -17,7 +17,6 @@ usersRouter.post('/', async (request, response) => {
 
   const user = new User({
     email,
-    name,
     passwordHash,
   })
 
