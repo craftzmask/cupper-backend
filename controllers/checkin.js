@@ -3,7 +3,7 @@ const Location = require('../models/location')
 const Restaurant = require('../models/restaurant')
 
 checkinRouter.post('/', async (request, response) => {
-  const { place_id, numberOfPeople } = request.body
+  const { place_id } = request.body
   const user = request.user
 
   const users = await Location.find({ user: user.id })
@@ -22,12 +22,15 @@ checkinRouter.post('/', async (request, response) => {
 
   const location = new Location({
     place_id,
-    numberOfPeople,
     user: user._id
   })
 
   await location.save()
-  restaurant.numberOfPeople += numberOfPeople
+
+  user.place_id = restaurant._id
+  await user.save()
+
+  restaurant.numberOfPeople.push(user._id.toString())
   const savedRestaurant = await restaurant.save()
 
   response.json(savedRestaurant)

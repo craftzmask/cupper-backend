@@ -17,7 +17,7 @@ restaurantsRouter.post('/', async (request, response) => {
       price_level: body.price_level,
       rating: body.rating,
       distance: body.distance,
-      numberOfPeople: 0
+      numberOfPeople: [],
     })
 
     const savedRestaurant = await restaurantObject.save()

@@ -3,6 +3,7 @@ const mongoose = require('mongoose')
 const userSchema = new mongoose.Schema({
   email: String,
   passwordHash: String,
+  place_id: String,
 })
 
 userSchema.set('toJSON', {

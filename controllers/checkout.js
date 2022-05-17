@@ -3,7 +3,7 @@ const Location = require('../models/location')
 const Restaurant = require('../models/restaurant')
 
 checkoutRouter.post('/', async (request, response) => {
-  const { place_id, numberOfPeople } = request.body
+  const { place_id } = request.body
 
   const restaurant = await Restaurant.findById(place_id)
   if (restaurant === null) {
@@ -20,7 +20,9 @@ checkoutRouter.post('/', async (request, response) => {
   }
   await Location.findOneAndDelete({ user: request.user.id })
   
-  restaurant.numberOfPeople -= numberOfPeople
+  const indexUser = restaurant.numberOfPeople.indexOf(user._id.toString())
+  restaurant.numberOfPeople.splice(indexUser, 1)
+
   const savedRestaurant = await restaurant.save()
   response.json(savedRestaurant)
 })

@@ -11,7 +11,7 @@ const restaurantSchema = new mongoose.Schema({
   price_level: Number,
   rating: Number,
   distance: Number,
-  numberOfPeople: Number
+  numberOfPeople: [String]
 })
 
 restaurantSchema.set('toJSON', {
