@@ -4,11 +4,7 @@ const Restaurant = require("../models/restaurant");
 restaurantsRouter.post("/", async (request, response) => {
   const body = request.body;
 
-  console.log("getting restuarants");
   const restaurant = await Restaurant.findById(body.place_id);
-
-  console.log("restaurant is");
-  console.log(restaurant);
 
   if (!restaurant) {
     const restaurantObject = new Restaurant({
