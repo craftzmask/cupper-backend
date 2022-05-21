@@ -4,16 +4,16 @@ const Restaurant = require("../models/restaurant");
 restaurantsRouter.post("/", async (request, response) => {
   const body = request.body;
 
-  const restaurant = await Restaurant.findById(body.place_id);
+  const restaurant = await Restaurant.find({ place_id: body.place_id });
 
   if (!restaurant) {
     const restaurantObject = new Restaurant({
-      _id: body.place_id,
+      place_id: body.place_id,
       name: body.name,
       address_object: {
         vicinity: body.vicinity,
         lat: body.lat,
-        lng: body.lng,
+        long: body.long,
       },
       price_level: body.price_level,
       rating: body.rating,
@@ -25,6 +25,7 @@ restaurantsRouter.post("/", async (request, response) => {
     response.status(201).json(savedRestaurant);
   }
 
+  console.log(restaurant);
   response.status(200).json(restaurant);
 });
 
@@ -34,7 +35,7 @@ restaurantsRouter.get("/", async (request, response) => {
 });
 
 restaurantsRouter.get("/:id", async (request, response) => {
-  const restaurant = await Restaurant.findById(request.params.id);
+  const restaurant = await Restaurant.findById(request.params.place_id);
   response.json(restaurant);
 });
 
