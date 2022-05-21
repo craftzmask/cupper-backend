@@ -12,8 +12,8 @@ restaurantsRouter.post("/", async (request, response) => {
       name: body.name,
       address_object: {
         vicinity: body.vicinity,
-        lat: body.lat,
-        long: body.long,
+        // lat: body.lat,
+        // long: body.long,
       },
       price_level: body.price_level,
       rating: body.rating,
