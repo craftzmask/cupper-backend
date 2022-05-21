@@ -5,8 +5,8 @@ const restaurantSchema = new mongoose.Schema({
   name: String,
   address_object: {
     vicinity: String,
-    // lat: Number,
-    // long: Number,
+    lat: Number,
+    long: Number,
   },
   price_level: Number,
   rating: Number,
