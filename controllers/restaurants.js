@@ -3,12 +3,13 @@ const Restaurant = require("../models/restaurant");
 
 restaurantsRouter.post("/", async (request, response) => {
   const body = request.body;
-  
+  console.log(body)
   const restaurant = await Restaurant.findOne({ place_id: body.place_id });
 
   if (!restaurant) {
     const restaurantObject = new Restaurant(request.body)
     const savedRestaurant = await restaurantObject.save();
+    console.log(savedRestaurant)
     response.status(201).json(savedRestaurant);
   }
 });
