@@ -5,7 +5,6 @@ const cors = require('cors')
 const mongoose = require('mongoose')
 const config = require('./utils/config')
 const middleware = require('./utils/middleware')
-const path = require('path')
 
 const usersRouter = require('./controllers/users')
 const loginRouter = require('./controllers/login')
@@ -26,9 +25,9 @@ app.use('/api/checkout', middleware.userExtractor, checkoutRouter)
 app.use('/api/restaurants', restaurantsRouter)
 app.use('/api/top', topRouter)
 
-app.get('/*', (req, res) => {
-  res.sendFile('build/index.html', { root: __dirname })
-});
+app.get('/*', (request, response) => {
+  response.sendFile('build/index.html', { root: __dirname })
+})
 
 app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)

@@ -12,7 +12,6 @@ checkoutRouter.post('/', async (request, response) => {
     })
   }
   
-
   if (request.user.place_id !== place_id) {
     return response.status(400).json({
       error: "The restaurant must be the same as checked in"
