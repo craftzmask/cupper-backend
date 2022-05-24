@@ -27,7 +27,7 @@ app.use('/api/restaurants', restaurantsRouter)
 app.use('/api/top', topRouter)
 
 app.get('*', async (request, response) => {
-  response.sendFile(path.join(__dirname, "build"))
+  response.sendFile('build')
 })
 
 app.use(middleware.unknownEndpoint)
