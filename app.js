@@ -26,7 +26,7 @@ app.use('/api/checkout', middleware.userExtractor, checkoutRouter)
 app.use('/api/restaurants', restaurantsRouter)
 app.use('/api/top', topRouter)
 
-app.get('*', async (request, response) => {
+app.get('/', async (request, response) => {
   response.sendFile('build')
 })
 
