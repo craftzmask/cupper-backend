@@ -26,6 +26,10 @@ app.use('/api/checkout', middleware.userExtractor, checkoutRouter)
 app.use('/api/restaurants', restaurantsRouter)
 app.use('/api/top', topRouter)
 
+app.get('*', async (request, response) => {
+  response.sendFile(path.join(__dirname, "build"))
+})
+
 app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)
 
