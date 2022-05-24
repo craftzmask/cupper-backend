@@ -35,7 +35,7 @@ app.use(middleware.errorHandler)
 
 mongoose
   .connect(config.MONGODB_URI)
-  .then(result => console.log('connected to MongoDB'))
+  .then(() => console.log('connected to MongoDB'))
   .catch((error) => console.log('error connecting to MongoDB:', error.message))
 
 module.exports = app
